@@ -1,43 +1,51 @@
-import './index.css'
-import React, { useEffect, useState } from 'react';
-import RecipeTitle from './RecipeTitle'
-import IngredientList from './IngredientList'
+import "./index.css";
+import React, { useState, useEffect } from "react";
+import RecipeTitle from "./RecipeTitle";
+import IngredientList from "./IngredientList";
 
 function App() {
-    const initialRecipe = {
-        title: 'Mashed potatoes',
-        feedback: {
-            rating: 4.8,
-            reviews: 20
-        },
-        ingredients: [
-            { name: '3 potatoes, cut into 1/2" pieces', prepared: false },
-            { name: '4 Tbsp butter', prepared: false },
-            { name: '1/8 cup heavy cream', prepared: false },
-            { name: 'Salt', prepared: true },
-            { name: 'Pepper', prepared: true },
-        ]
-    };
+  const initialRecipe = {
+    title: "Mashed potatoes",
+    feedback: {
+      rating: 4.8,
+      reviews: 20,
+    },
+    ingredients: [
+      { name: '3 potatoes, cut into 1/2" pieces', prepared: false },
+      { name: "4 Tbsp butter", prepared: false },
+      { name: "1/8 cup heavy cream", prepared: false },
+      { name: "Salt", prepared: true },
+      { name: "Pepper", prepared: true },
+    ],
+  };
 
-    // TODO: Create recipe state
+  const [recipe, setRecipe] = useState(initialRecipe);
+  const [prepared, setPrepared] = useState(false);
 
-    // TODO: Add new state property
+  function ingredientClick(index) {
+    const updateRecipe = { ...recipe };
+    updateRecipe.ingredients[index].prepared =
+      !updateRecipe.ingredients[index].prepared;
+    setRecipe(updateRecipe);
+  }
 
-    // TODO: Create ingredientClick event listener
+  useEffect(() => {
+    setPrepared(recipe.ingredients.every((i) => i.prepared));
+  }, [recipe]);
 
-    // TODO: Add the effect hook
+  return (
+    <article>
+      <h1>Recipe Manager</h1>
+      <RecipeTitle title={recipe.title} feedback={recipe.feedback} />
 
-    return (
-        <article>
-            <h1>Recipe Manager</h1>
+      <IngredientList
+        ingredients={recipe.ingredients}
+        onClick={ingredientClick}
+      />
 
-            {/* TODO: Pass recipe metadata to RecipeTitle */}
-
-            {/* TODO: Pass ingredients and event listener to IngredientList */}
-
-            {/* TODO: Add the prep work display */}
-        </article>
-    )
+      {prepared ? <h2>Prep work done!</h2> : <h2>Just keep chopping.</h2>}
+    </article>
+  );
 }
 
 export default App;
